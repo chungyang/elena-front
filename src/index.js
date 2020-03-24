@@ -18,25 +18,34 @@ class ElenaMap extends React.Component {
     }
   }
 
-  componentDidMount() {
-     const map = this.mapRef.current.leafletElement;  //get native Map instance
-     console.log(map)
-     // map.fitBounds(group.getBounds());
+  componentDidMount(prevProps) {
+     var map = this.mapRef.current;
+     var featureGroup = this.groupRef.current;
+     console.log(map);
+     console.log(featureGroup);
+     if(map !== null && featureGroup !== null){
+       map = map.leafletElement
+       featureGroup = featureGroup.leafletElement
+       map.fitBounds(featureGroup.getBounds());
+     }
   }
 
   render() {
     const position = [this.state.center[0], this.state.center[1]];
     return (
-        <Map center={position} zoom={this.state.zoom}  ref={this.mapRef}>
-          <TileLayer
-            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
-            boundsOptions={this.state.highlighted_route}
-          />
-          <FeatureGroup ref={this.groupRef}>
-            <Polyline color="blue" positions={this.state.highlighted_route}/>
-          </FeatureGroup>
-        </Map>
+      <div>
+      <SearchBar/>
+      <Map center={position} zoom={this.state.zoom}  ref={this.mapRef}>
+        <TileLayer
+          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
+          boundsOptions={this.state.highlighted_route}
+        />
+        <FeatureGroup ref={this.groupRef}>
+          <Polyline color="blue" positions={this.state.highlighted_route}/>
+        </FeatureGroup>
+      </Map>
+      </div>
     );
   }
 }
@@ -44,15 +53,15 @@ class ElenaMap extends React.Component {
 class SearchBar extends React.Component{
   render(){
     return (
-      <form action="" method="get" >
+      <form action="" method="get" id = "search_form">
         <div className="div_pad"></div>
-        <div className="form-group row" id="search_form">
+        <div className="form-group row" >
           <input className="form-control" type="text" name="origin" id="from" required placeholder="From"/>
         </div>
-        <div className="form-group row" id="search_form">
+        <div className="form-group row" >
           <input className="form-control" type="text" name="destination" id="to" required placeholder="To"/>
         </div>
-        <div className="form-example" id="search_form">
+        <div className="form-example" >
           <input className="btn btn-primary" type="submit" value="Search"/>
         </div>
       </form>
@@ -63,4 +72,3 @@ class SearchBar extends React.Component{
 
 
 ReactDOM.render(<ElenaMap />, document.getElementById('root'))
-ReactDOM.render(<SearchBar />, document.getElementById('form'))
