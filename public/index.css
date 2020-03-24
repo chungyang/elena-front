@@ -1,0 +1,20 @@
+html, body {
+	height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+#search_form {
+	padding-left: 10px;
+	width: 25%;
+}
+.div_pad {
+	padding-top: 20px;
+}
+
+.leaflet-container {
+  position: absolute;
+  right: 0;
+  height: 100%;
+  width: 75%;
+}
