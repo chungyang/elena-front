@@ -11,24 +11,21 @@ class ElenaMap extends React.Component {
     this.groupRef = React.createRef();
     this.state = {
       center: [42.361145, -71.057083],
-      zoom: 20,
-      highlighted_route: [[42.704202, -71.502017],
-	       [42.7036844, -71.5020453],
-	       [42.7035846, -71.5020392]]
+      zoom: 20
     }
   }
 
-  componentDidMount(prevProps) {
-     var map = this.mapRef.current;
-     var featureGroup = this.groupRef.current;
-     console.log(map);
-     console.log(featureGroup);
-     if(map !== null && featureGroup !== null){
-       map = map.leafletElement
-       featureGroup = featureGroup.leafletElement
-       map.fitBounds(featureGroup.getBounds());
-     }
-  }
+  // componentDidMount(prevProps) {
+  //    var map = this.mapRef.current;
+  //    var featureGroup = this.groupRef.current;
+  //    console.log(map);
+  //    console.log(featureGroup);
+  //    if(map !== null && featureGroup !== null){
+  //      map = map.leafletElement
+  //      featureGroup = featureGroup.leafletElement
+  //      map.fitBounds(featureGroup.getBounds());
+  //    }
+  // }
 
   render() {
     const position = [this.state.center[0], this.state.center[1]];
@@ -39,27 +36,73 @@ class ElenaMap extends React.Component {
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
-          boundsOptions={this.state.highlighted_route}
         />
-        <FeatureGroup ref={this.groupRef}>
-          <Polyline color="blue" positions={this.state.highlighted_route}/>
-        </FeatureGroup>
+        <HighlightedRoute />
       </Map>
       </div>
     );
   }
 }
 
+class HighlightedRoute extends React.Component{
+
+  constructor(){
+    super()
+    this.state = {
+      highlighted_route: [
+        [42.704202, -71.502017],
+	       [42.7036844, -71.5020453],
+	       [42.7035846, -71.5020392]]
+    }
+  }
+
+  render(){
+    return(
+      <FeatureGroup>
+        <Polyline color="blue" positions={this.state.highlighted_route}/>
+      </FeatureGroup>
+    );
+  }
+}
+
 class SearchBar extends React.Component{
+
+  constructor(){
+    super();
+    this.state = {
+      from : "",
+      to : ""
+    }
+    this.changeHandler = this.changeHandler.bind(this);
+    this.submitHandler = this.submitHandler.bind(this);
+    console.log(this)
+
+  }
+
+
+  submitHandler = (event) =>{
+
+  }
+
+  changeHandler = (event) =>{
+    const name = event.target.id
+    const value = event.target.value
+    this.setState({
+      [name]: value,
+    })
+  }
+
   render(){
     return (
-      <form action="" method="get" id = "search_form">
+      <form onSubmit={this.submitHandler} id = "search_form">
         <div className="div_pad"></div>
         <div className="form-group row" >
-          <input className="form-control" type="text" name="origin" id="from" required placeholder="From"/>
+          <input className="form-control"  type="text" name="origin"
+           id="from" required placeholder="From" onChange={this.changeHandler}/>
         </div>
         <div className="form-group row" >
-          <input className="form-control" type="text" name="destination" id="to" required placeholder="To"/>
+          <input className="form-control" type="text" name="destination"
+          id="to" required placeholder="To" onChange={this.changeHandler}/>
         </div>
         <div className="form-example" >
           <input className="btn btn-primary" type="submit" value="Search"/>
