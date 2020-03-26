@@ -31,7 +31,7 @@ class ElenaMap extends React.Component {
     const position = [this.state.center[0], this.state.center[1]];
     return (
       <div>
-      <SearchBar/>
+      <SearchBar />
       <Map center={position} zoom={this.state.zoom}  ref={this.mapRef}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -49,10 +49,7 @@ class HighlightedRoute extends React.Component{
   constructor(){
     super()
     this.state = {
-      highlighted_route: [
-        [42.704202, -71.502017],
-	       [42.7036844, -71.5020453],
-	       [42.7035846, -71.5020392]]
+      highlighted_route: []
     }
   }
 
@@ -71,17 +68,16 @@ class SearchBar extends React.Component{
     super();
     this.state = {
       from : "",
-      to : ""
+      to : "",
     }
-    this.changeHandler = this.changeHandler.bind(this);
-    this.submitHandler = this.submitHandler.bind(this);
-    console.log(this)
-
   }
 
 
   submitHandler = (event) =>{
-
+    event.preventDefault();
+    fetch("http://localhost:8080/" + this.state.from + "/" + this.state.to)
+      .then(response => {return response.json();})
+      .then(data => console.log(data))
   }
 
   changeHandler = (event) =>{
