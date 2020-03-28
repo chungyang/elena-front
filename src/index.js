@@ -3,6 +3,7 @@ import React from "react";
 import ReactDOM from 'react-dom';
 import { Polyline, Map, TileLayer, FeatureGroup} from "react-leaflet";
 import 'bootstrap/dist/css/bootstrap.css';
+import { DropdownButton, Dropdown} from 'react-bootstrap'
 
 class ElenaMap extends React.Component {
 
@@ -46,6 +47,42 @@ class ElenaMap extends React.Component {
   }
 }
 
+class AlgorithmMenu extends React.Component{
+  constructor(){
+    super();
+    this.algorithms = ["A*", "DIKSTRA"];
+    this.elevationModes = ["Max", "Min"];
+    this.state = {
+      algorithm: "Choose an algorithm",
+      elevation: "Choose an elevation mode"
+    }
+  }
+
+  changeAlgorithm = (eventKey, event) =>{
+    this.setState({title:eventKey})
+  }
+
+  changeElevationMode =  (eventKey, event) =>{
+    this.state({elevation:eventKey})
+  }
+  render(){
+    return(
+      <div>
+        <b>Algorithm</b>
+        <DropdownButton id="dropdown-basic-button" title={this.state.algorithm}>
+          <Dropdown.Item eventKey = {this.algorithms[0]} onSelect={this.changeAlgorithm}>A*</Dropdown.Item>
+          <Dropdown.Item eventKey = {this.algorithms[1]} onSelect={this.changeAlgorithm}>Dijkstra</Dropdown.Item>
+        </DropdownButton>
+        <div class="pad_top"/>
+        <b>Elvation Mode</b>
+        <DropdownButton id="dropdown-basic-button" title={this.state.elevation}>
+          <Dropdown.Item eventKey = {this.elevationModes[0]} onSelect={this.changeTitle}>Max</Dropdown.Item>
+          <Dropdown.Item eventKey = {this.elevationModes[1]} onSelect={this.changeTitle}>Min</Dropdown.Item>
+        </DropdownButton>
+      </div>
+    );
+  }
+}
 
 class SearchBar extends React.Component{
 
@@ -74,23 +111,25 @@ class SearchBar extends React.Component{
 
   render(){
     return (
-      <form onSubmit={this.submitHandler} id = "search_form">
-        <div className="div_pad"></div>
-        <div className="form-group row" >
-          <input className="form-control"  type="text" name="origin"
-           id="from" required placeholder="From" onChange={this.changeHandler}/>
-        </div>
-        <div className="form-group row" >
-          <input className="form-control" type="text" name="destination"
-          id="to" required placeholder="To" onChange={this.changeHandler}/>
-        </div>
-        <div className="form-example" >
-          <input className="btn btn-primary" type="submit" value="Search"/>
-        </div>
-      </form>
+      <div>
+        <form onSubmit={this.submitHandler} id = "search_form">
+          <div className="pad_top"></div>
+          <div className="form-group row" >
+            <input className="form-control"  type="text" name="origin"
+             id="from" required placeholder="From" onChange={this.changeHandler}/>
+          </div>
+          <div className="form-group row" >
+            <input className="form-control" type="text" name="destination"
+            id="to" required placeholder="To" onChange={this.changeHandler}/>
+          </div>
+          <AlgorithmMenu />
+          <div className="pad_top" >
+            <input className="btn btn-primary" type="submit" value="Search"/>
+          </div>
+        </form>
+      </div>
     );
   }
-
 }
 
 
