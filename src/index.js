@@ -100,11 +100,14 @@ class SearchBar extends React.Component{
 
   submitHandler = (event) =>{
     event.preventDefault();
-    const uri = "http://localhost:8080/" + this.state.from + "/" + this.state.to
-              + "/" + this.state.algorithm + "/" + this.state.elevationMode
-              + "/" + this.state.percentage
-    alert(uri)
-    fetch(uri)
+    const uri = new URL("http://localhost:8080/");
+    uri.searchParams.append("from", this.state.from)
+    uri.searchParams.append("to", this.state.to)
+    uri.searchParams.append("algorithm", this.state.algorithm)
+    uri.searchParams.append("elemode", this.state.elevationMode)
+    uri.searchParams.append("percentage", this.state.percentage)
+
+    fetch(uri.href)
       .then(response => {
         if(!response.ok) alert("Server is not avaiable")
         else return response.json();})
@@ -129,16 +132,16 @@ class SearchBar extends React.Component{
         <form onSubmit={this.submitHandler} id = "search_form">
           <div className="pad_top"></div>
           <div className="form-group row" >
-            <input className="form-control"  type="text" name="origin"
+            <input className="form-control"  type="text"
              id="from" required placeholder="From" onChange={this.changeHandler}/>
           </div>
           <div className="form-group row" >
-            <input className="form-control" type="text" name="destination"
+            <input className="form-control" type="text"
             id="to" required placeholder="To" onChange={this.changeHandler}/>
           </div>
           <div className="form-group row" >
-            <input className="form-control" type="text" name="percentage"
-            id="shortest_percent" required placeholder="Shortest Path %" onChange={this.changeHandler}/>
+            <input className="form-control" type="text"
+            id="percentage" required placeholder="Shortest Path %" onChange={this.changeHandler}/>
           </div>
           <AlgorithmMenu onSelect={this.algoMenuSelectHandler}/>
           <div className="pad_top" id="submit_button">
