@@ -3,7 +3,7 @@ import React from "react";
 import ReactDOM from 'react-dom';
 import { Polyline, Map, TileLayer, FeatureGroup} from "react-leaflet";
 import 'bootstrap/dist/css/bootstrap.css';
-import { DropdownButton, Dropdown} from 'react-bootstrap'
+import { DropdownButton, Dropdown, Button} from 'react-bootstrap'
 
 class ElenaMap extends React.Component {
 
@@ -22,8 +22,6 @@ class ElenaMap extends React.Component {
   highlighted_route = (route) => {
     const mapElement = this.mapRef.current.leafletElement;
     const routeElement = this.routeRef.current.leafletElement;
-    console.log(mapElement)
-    console.log(routeElement)
     this.setState({highlighted_route:route.values});
     mapElement.fitBounds(routeElement.getBounds());
   }
@@ -48,9 +46,9 @@ class ElenaMap extends React.Component {
 }
 
 class AlgorithmMenu extends React.Component{
-  constructor(){
-    super();
-    this.algorithms = ["A*", "DIKSTRA"];
+  constructor(props){
+    super(props);
+    this.algorithms = ["A*", "Dijkstra"];
     this.elevationModes = ["Max", "Min"];
     this.state = {
       algorithm: "Choose an algorithm",
@@ -59,25 +57,28 @@ class AlgorithmMenu extends React.Component{
   }
 
   changeAlgorithm = (eventKey, event) =>{
-    this.setState({title:eventKey})
+    this.setState({algorithm:eventKey})
+    return this.props.onSelect({key:"algorithm", value:eventKey.toLowerCase()});
   }
 
   changeElevationMode =  (eventKey, event) =>{
-    this.state({elevation:eventKey})
+    this.setState({elevation:eventKey})
+    return this.props.onSelect({key:"elevation", value:eventKey.toLowerCase()});
   }
+
   render(){
     return(
       <div>
         <b>Algorithm</b>
-        <DropdownButton id="dropdown-basic-button" title={this.state.algorithm}>
-          <Dropdown.Item eventKey = {this.algorithms[0]} onSelect={this.changeAlgorithm}>A*</Dropdown.Item>
+        <DropdownButton id="dropdown-basic-button" title={this.state.algorithm} variant="outline-primary">
+          <Dropdown.Item eventKey = {this.algorithms[0]} onSelect={this.changeAlgorithm} >A*</Dropdown.Item>
           <Dropdown.Item eventKey = {this.algorithms[1]} onSelect={this.changeAlgorithm}>Dijkstra</Dropdown.Item>
         </DropdownButton>
-        <div class="pad_top"/>
+        <div className="pad_top"/>
         <b>Elvation Mode</b>
-        <DropdownButton id="dropdown-basic-button" title={this.state.elevation}>
-          <Dropdown.Item eventKey = {this.elevationModes[0]} onSelect={this.changeTitle}>Max</Dropdown.Item>
-          <Dropdown.Item eventKey = {this.elevationModes[1]} onSelect={this.changeTitle}>Min</Dropdown.Item>
+        <DropdownButton id="dropdown-basic-button" title={this.state.elevation} variant="outline-primary">
+          <Dropdown.Item eventKey = {this.elevationModes[0]} onSelect={this.changeElevationMode}>Max</Dropdown.Item>
+          <Dropdown.Item eventKey = {this.elevationModes[1]} onSelect={this.changeElevationMode}>Min</Dropdown.Item>
         </DropdownButton>
       </div>
     );
@@ -91,13 +92,22 @@ class SearchBar extends React.Component{
     this.state = {
       from : "",
       to : "",
+      percentage: "50",
+      algorithm: "dijkstra",
+      elevationMode: "min"
     }
   }
 
   submitHandler = (event) =>{
     event.preventDefault();
-    fetch("http://localhost:8080/" + this.state.from + "/" + this.state.to)
-      .then(response => {return response.json();})
+    const uri = "http://localhost:8080/" + this.state.from + "/" + this.state.to
+              + "/" + this.state.algorithm + "/" + this.state.elevationMode
+              + "/" + this.state.percentage
+    alert(uri)
+    fetch(uri)
+      .then(response => {
+        if(!response.ok) alert("Server is not avaiable")
+        else return response.json();})
       .then(data => this.props.onGetRoute(data))
   }
 
@@ -107,6 +117,10 @@ class SearchBar extends React.Component{
     this.setState({
       [name]: value,
     })
+  }
+
+  algoMenuSelectHandler = (selection) =>{
+    this.setState({[selection.key]:selection.value})
   }
 
   render(){
@@ -122,9 +136,13 @@ class SearchBar extends React.Component{
             <input className="form-control" type="text" name="destination"
             id="to" required placeholder="To" onChange={this.changeHandler}/>
           </div>
-          <AlgorithmMenu />
-          <div className="pad_top" >
-            <input className="btn btn-primary" type="submit" value="Search"/>
+          <div className="form-group row" >
+            <input className="form-control" type="text" name="percentage"
+            id="shortest_percent" required placeholder="Shortest Path %" onChange={this.changeHandler}/>
+          </div>
+          <AlgorithmMenu onSelect={this.algoMenuSelectHandler}/>
+          <div className="pad_top" id="submit_button">
+            <Button variant="outline-primary" type="submit">Search</Button>
           </div>
         </form>
       </div>

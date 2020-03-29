@@ -13,6 +13,9 @@ html, body {
 	padding-top: 15px;
 }
 
+#submit_button{
+	padding-top: 25px;
+}
 .leaflet-container {
   position: absolute;
   right: 0;
