@@ -100,7 +100,7 @@ class SearchBar extends React.Component{
 
   submitHandler = (event) =>{
     event.preventDefault();
-    const uri = new URL("http://localhost:8080/");
+    const uri = new URL("http://localhost:8080/search");
     uri.searchParams.append("from", this.state.from)
     uri.searchParams.append("to", this.state.to)
     uri.searchParams.append("algorithm", this.state.algorithm)
@@ -108,10 +108,9 @@ class SearchBar extends React.Component{
     uri.searchParams.append("percentage", this.state.percentage)
 
     fetch(uri.href)
-      .then(response => {
-        if(!response.ok) alert("Server is not avaiable")
-        else return response.json();})
+      .then(response =>  {return response.json();})
       .then(data => this.props.onGetRoute(data))
+      .catch(error => alert("something went wrong"))
   }
 
   changeHandler = (event) =>{
