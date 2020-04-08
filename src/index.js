@@ -3,7 +3,7 @@ import React from "react";
 import ReactDOM from 'react-dom';
 import { Polyline, Map, TileLayer, FeatureGroup} from "react-leaflet";
 import 'bootstrap/dist/css/bootstrap.css';
-import { DropdownButton, Dropdown, Button} from 'react-bootstrap'
+import SearchBar from './SearchBar';
 
 class ElenaMap extends React.Component {
 
@@ -40,113 +40,6 @@ class ElenaMap extends React.Component {
           <Polyline color="blue" positions={this.state.highlighted_route} ref={this.routeRef}/>
         </FeatureGroup>
       </Map>
-      </div>
-    );
-  }
-}
-
-class AlgorithmMenu extends React.Component{
-  constructor(props){
-    super(props);
-    this.algorithms = ["A*", "Dijkstra"];
-    this.elevationModes = ["Max", "Min"];
-    this.state = {
-      algorithm: "Choose an algorithm",
-      elevation: "Choose an elevation mode"
-    }
-  }
-
-  changeAlgorithm = (eventKey, event) =>{
-    this.setState({algorithm:eventKey})
-    return this.props.onSelect({key:"algorithm", value:eventKey.toLowerCase()});
-  }
-
-  changeElevationMode =  (eventKey, event) =>{
-    this.setState({elevation:eventKey})
-    return this.props.onSelect({key:"elevation", value:eventKey.toLowerCase()});
-  }
-
-  render(){
-    return(
-      <div>
-        <b>Algorithm</b>
-        <DropdownButton id="dropdown-basic-button" title={this.state.algorithm} variant="outline-primary">
-          <Dropdown.Item eventKey = {this.algorithms[0]} onSelect={this.changeAlgorithm} >A*</Dropdown.Item>
-          <Dropdown.Item eventKey = {this.algorithms[1]} onSelect={this.changeAlgorithm}>Dijkstra</Dropdown.Item>
-        </DropdownButton>
-        <div className="pad_top"/>
-        <b>Elvation Mode</b>
-        <DropdownButton id="dropdown-basic-button" title={this.state.elevation} variant="outline-primary">
-          <Dropdown.Item eventKey = {this.elevationModes[0]} onSelect={this.changeElevationMode}>Max</Dropdown.Item>
-          <Dropdown.Item eventKey = {this.elevationModes[1]} onSelect={this.changeElevationMode}>Min</Dropdown.Item>
-        </DropdownButton>
-      </div>
-    );
-  }
-}
-
-class SearchBar extends React.Component{
-
-  constructor(props){
-    super(props);
-    this.state = {
-      from : "",
-      to : "",
-      percentage: "50",
-      algorithm: "dijkstra",
-      elevationMode: "min"
-    }
-  }
-
-  submitHandler = (event) =>{
-    event.preventDefault();
-    const uri = new URL("http://localhost:8080/search");
-    uri.searchParams.append("from", this.state.from)
-    uri.searchParams.append("to", this.state.to)
-    uri.searchParams.append("algorithm", this.state.algorithm)
-    uri.searchParams.append("elemode", this.state.elevationMode)
-    uri.searchParams.append("percentage", this.state.percentage)
-
-    fetch(uri.href)
-      .then(response =>  {return response.json();})
-      .then(data => this.props.onGetRoute(data))
-      .catch(error => alert("something went wrong"))
-  }
-
-  changeHandler = (event) =>{
-    const name = event.target.id
-    const value = event.target.value
-    this.setState({
-      [name]: value,
-    })
-  }
-
-  algoMenuSelectHandler = (selection) =>{
-    this.setState({[selection.key]:selection.value})
-  }
-
-  render(){
-    return (
-      <div>
-        <form onSubmit={this.submitHandler} id = "search_form">
-          <div className="pad_top"></div>
-          <div className="form-group row" >
-            <input className="form-control"  type="text"
-             id="from" required placeholder="From" onChange={this.changeHandler}/>
-          </div>
-          <div className="form-group row" >
-            <input className="form-control" type="text"
-            id="to" required placeholder="To" onChange={this.changeHandler}/>
-          </div>
-          <div className="form-group row" >
-            <input className="form-control" type="text"
-            id="percentage" required placeholder="Shortest Path %" onChange={this.changeHandler}/>
-          </div>
-          <AlgorithmMenu onSelect={this.algoMenuSelectHandler}/>
-          <div className="pad_top" id="submit_button">
-            <Button variant="outline-primary" type="submit">Search</Button>
-          </div>
-        </form>
       </div>
     );
   }
