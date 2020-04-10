@@ -10,7 +10,7 @@ class SearchBar extends React.Component{
 
   constructor(props){
     super(props);
-    this.top100Films = [];
+
 
     this.useStyles = makeStyles((theme) => ({
       root: {
@@ -26,37 +26,46 @@ class SearchBar extends React.Component{
       to : "",
       percentage: "50",
       algorithm: "dijkstra",
-      elevationMode: "min"
+      elevationMode: "min",
+      locationNames: [{name:"jersey"}]
     }
   }
 
   submitHandler = (event) =>{
     event.preventDefault();
     const uri = new URL("http://localhost:8080/search");
-    uri.searchParams.append("from", this.state.from)
-    uri.searchParams.append("to", this.state.to)
-    uri.searchParams.append("algorithm", this.state.algorithm)
-    uri.searchParams.append("elemode", this.state.elevationMode)
-    uri.searchParams.append("percentage", this.state.percentage)
-    alert(uri.href)
+    uri.searchParams.append("from", this.state.from);
+    uri.searchParams.append("to", this.state.to);
+    uri.searchParams.append("algorithm", this.state.algorithm);
+    uri.searchParams.append("elemode", this.state.elevationMode);
+    uri.searchParams.append("percentage", this.state.percentage);
+
     fetch(uri.href)
-      .then(response =>  {return response.json();})
+      .then(response =>  {return response.json()})
       .then(data => this.props.onGetRoute(data))
       .catch(error => alert("something went wrong"))
+  }
+
+   requestForOptions = (name) => {
+    const uri = new URL("http://localhost:8080/autocomplete");
+    uri.searchParams.append("name", name);
+
+    fetch(uri.href)
+      .then(response => { return response.json()} )
+      .then(data => this.setState({locationNames: data.values}))
   }
 
   changeHandler = (event, event_value) =>{
     const name = event.target.id.split("-")[0]
     const value = event_value?  event_value : event.target.value
-
     this.setState({
       [name]: value,
     })
+    if(name === "from" && this.state.from.length >= 2){
+      this.requestForOptions(this.state.from)
+    }
   }
 
-  autocompleteSelectionHandler = (selection)=>{
-    console.log(selection)
-  }
 
   algoMenuSelectHandler = (selection) =>{
     this.setState({[selection.key]:selection.value})
@@ -70,7 +79,7 @@ class SearchBar extends React.Component{
         <div id="search_form">
           <Autocomplete
              freeSolo
-             options={this.top100Films.map((option) => option.title)}
+             options={this.state.locationNames.map((option) => option.name)}
              id="from"
              onChange={this.changeHandler}
              renderInput={(params) => (
@@ -78,7 +87,7 @@ class SearchBar extends React.Component{
                  {...params}
                  label="Origin"
                  margin="normal"
-                 variant="outlined"
+                 variant="filled"
                  onChange={this.changeHandler}
                  InputProps={{ ...params.InputProps, type: 'from_search' }}
                />
@@ -86,7 +95,7 @@ class SearchBar extends React.Component{
            />
             <Autocomplete
               freeSolo
-              options={this.top100Films.map((option)=>option.title)}
+              options={this.state.locationNames.map((option)=>option.name)}
               id="to"
               onChange={this.changeHandler}
               renderInput={(params) => (
@@ -94,7 +103,7 @@ class SearchBar extends React.Component{
                   {...params}
                   label="Destination"
                   margin="normal"
-                  variant="outlined"
+                  variant="filled"
                   onChange={this.changeHandler}
                   InputProps={{ ...params.InputProps, type: 'to_search'}}
                 />
@@ -102,7 +111,7 @@ class SearchBar extends React.Component{
             />
             <AlgorithmMenu onSelect={this.algoMenuSelectHandler}/>
             <div className="pad_top" id="submit_button">
-              <Button variant="outline-primary" type="submit">Search</Button>
+              <Button variant="outline-secondary" type="submit">Search</Button>
             </div>
         </div>
 

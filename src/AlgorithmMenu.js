@@ -27,13 +27,13 @@ class AlgorithmMenu extends React.Component{
     return(
       <div>
         <b>Algorithm</b>
-        <DropdownButton id="dropdown-basic-button" title={this.state.algorithm} variant="outline-primary">
+        <DropdownButton id="dropdown-basic-button" title={this.state.algorithm} variant="outline-secondary">
           <Dropdown.Item eventKey = {this.algorithms[0]} onSelect={this.changeAlgorithm} >A*</Dropdown.Item>
           <Dropdown.Item eventKey = {this.algorithms[1]} onSelect={this.changeAlgorithm}>Dijkstra</Dropdown.Item>
         </DropdownButton>
         <div className="pad_top"/>
         <b>Elvation Mode</b>
-        <DropdownButton id="dropdown-basic-button" title={this.state.elevation} variant="outline-primary">
+        <DropdownButton id="dropdown-basic-button" title={this.state.elevation} variant="outline-secondary">
           <Dropdown.Item eventKey = {this.elevationModes[0]} onSelect={this.changeElevationMode}>Max</Dropdown.Item>
           <Dropdown.Item eventKey = {this.elevationModes[1]} onSelect={this.changeElevationMode}>Min</Dropdown.Item>
         </DropdownButton>
