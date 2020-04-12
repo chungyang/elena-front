@@ -27,7 +27,8 @@ class SearchBar extends React.Component{
       percentage: "50",
       algorithm: "dijkstra",
       elevationMode: "min",
-      locationNames: [{name:"jersey"}]
+      fromLocationNames: [],
+      toLocationNames: []
     }
   }
 
@@ -40,37 +41,56 @@ class SearchBar extends React.Component{
     uri.searchParams.append("elemode", this.state.elevationMode);
     uri.searchParams.append("percentage", this.state.percentage);
 
+
     fetch(uri.href)
       .then(response =>  {return response.json()})
       .then(data => this.props.onGetRoute(data))
       .catch(error => alert("something went wrong"))
   }
 
-   requestForOptions = (name) => {
+   requestForOptions = (name, type) => {
     const uri = new URL("http://localhost:8080/autocomplete");
     uri.searchParams.append("name", name);
 
     fetch(uri.href)
       .then(response => { return response.json()} )
-      .then(data => this.setState({locationNames: data.values}))
+      .then(data =>{
+        if(type === "from"){
+          this.setState({fromLocationNames: data.values})
+        }
+        else{
+          this.setState({toLocationNames: data.values})
+        }
+      })
   }
 
   changeHandler = (event, event_value) =>{
     const name = event.target.id.split("-")[0]
     const value = event_value?  event_value : event.target.value
+
     this.setState({
       [name]: value,
-    })
-    if(name === "from" && this.state.from.length >= 2){
-      this.requestForOptions(this.state.from)
-    }
+    }, () => {
+      if(name === "from" && this.state.from.length === 2){
+          this.requestForOptions(this.state.from, "from")
+        }
+      else if (name === "from" && this.state.from.length === 0) {
+        this.setState({fromLocationNames:[]})
+      }
+      else if((name === "to" && this.state.to.length === 2)){
+        this.requestForOptions(this.state.to, "to")
+      }
+      else if((name === "to" && this.state.to.length === 0)){
+        this.setState({toLocationNames:[]})
+      }
+      });
+
   }
 
 
   algoMenuSelectHandler = (selection) =>{
     this.setState({[selection.key]:selection.value})
   }
-
 
   render(){
     return (
@@ -79,7 +99,7 @@ class SearchBar extends React.Component{
         <div id="search_form">
           <Autocomplete
              freeSolo
-             options={this.state.locationNames.map((option) => option.name)}
+             options={this.state.fromLocationNames.map((option) => option.name)}
              id="from"
              onChange={this.changeHandler}
              renderInput={(params) => (
@@ -95,7 +115,7 @@ class SearchBar extends React.Component{
            />
             <Autocomplete
               freeSolo
-              options={this.state.locationNames.map((option)=>option.name)}
+              options={this.state.toLocationNames.map((option)=>option.name)}
               id="to"
               onChange={this.changeHandler}
               renderInput={(params) => (
