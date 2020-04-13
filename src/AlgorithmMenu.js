@@ -5,8 +5,8 @@ import { DropdownButton, Dropdown} from 'react-bootstrap'
 class AlgorithmMenu extends React.Component{
   constructor(props){
     super(props);
-    this.algorithms = ["A*", "Dijkstra"];
-    this.elevationModes = ["Max", "Min"];
+    this.algorithms = ["A_STAR_YEN", "DIJKSTRA_YEN"];
+    this.elevationModes = ["MAX", "MIN"];
     this.state = {
       algorithm: "Choose an algorithm",
       elevation: "Choose an elevation mode"
@@ -15,12 +15,12 @@ class AlgorithmMenu extends React.Component{
 
   changeAlgorithm = (eventKey, event) =>{
     this.setState({algorithm:eventKey})
-    return this.props.onSelect({key:"algorithm", value:eventKey.toLowerCase()});
+    return this.props.onSelect({key:"algorithm", value:eventKey});
   }
 
   changeElevationMode =  (eventKey, event) =>{
     this.setState({elevation:eventKey})
-    return this.props.onSelect({key:"elevation", value:eventKey.toLowerCase()});
+    return this.props.onSelect({key:"elevation", value:eventKey});
   }
 
   render(){

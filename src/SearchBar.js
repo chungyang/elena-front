@@ -24,9 +24,9 @@ class SearchBar extends React.Component{
     this.state = {
       from : "",
       to : "",
-      percentage: "50",
-      algorithm: "dijkstra",
-      elevationMode: "min",
+      percentage: "150",
+      algorithm: "DIJKSTRA_YEN",
+      elevationMode: "MIN",
       fromLocationNames: [],
       toLocationNames: []
     }
@@ -128,6 +128,13 @@ class SearchBar extends React.Component{
                   InputProps={{ ...params.InputProps, type: 'to_search'}}
                 />
               )}
+            />
+            <TextField
+              label="Shortest Path%"
+              margin="normal"
+              variant="filled"
+              onChange={this.changeHandler}
+              id="percentage"
             />
             <AlgorithmMenu onSelect={this.algoMenuSelectHandler}/>
             <div className="pad_top" id="submit_button">
