@@ -1,7 +1,7 @@
 
 import React from "react";
 import ReactDOM from 'react-dom';
-import { Polyline, Map, TileLayer, FeatureGroup, Marker, Popup} from "react-leaflet";
+import { Polyline, Map, TileLayer, FeatureGroup, CircleMarker, Popup} from "react-leaflet";
 import 'bootstrap/dist/css/bootstrap.css';
 import SearchBar from './SearchBar';
 import 'leaflet/dist/leaflet.css';
@@ -20,12 +20,6 @@ class ElenaMap extends React.Component {
       markers: []
     }
 
-    let DefaultIcon = L.icon({
-    iconUrl: icon,
-    shadowUrl: iconShadow
-    });
-
-    L.Marker.prototype.options.icon = DefaultIcon;
 
     this.routeRef = React.createRef();
     this.mapRef = React.createRef();
@@ -56,6 +50,9 @@ class ElenaMap extends React.Component {
         />
         <FeatureGroup>
           <Polyline color="blue" weight='5' positions={this.state.highlighted_route} ref={this.routeRef}/>
+          {this.state.markers.map((position, idx) =>
+            <CircleMarker key={`marker-${idx}`} center={position}/>
+          )}
         </FeatureGroup>
       </Map>
       </div>
