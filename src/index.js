@@ -5,9 +5,6 @@ import { Polyline, Map, TileLayer, FeatureGroup, CircleMarker, Popup} from "reac
 import 'bootstrap/dist/css/bootstrap.css';
 import SearchBar from './SearchBar';
 import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
 class ElenaMap extends React.Component {
 
@@ -17,7 +14,9 @@ class ElenaMap extends React.Component {
       center: [42.361145, -71.057083],
       zoom: 20,
       highlighted_route: [],
-      markers: []
+      markers: [],
+      popups: ["Origin", "Destination"],
+      marker_color: ["green", "red"]
     }
 
 
@@ -51,7 +50,9 @@ class ElenaMap extends React.Component {
         <FeatureGroup>
           <Polyline color="blue" weight='5' positions={this.state.highlighted_route} ref={this.routeRef}/>
           {this.state.markers.map((position, idx) =>
-            <CircleMarker key={`marker-${idx}`} center={position}/>
+            <CircleMarker key={`marker-${idx}`} center={position} color="white" fillOpacity='0.8' fillColor={this.state.marker_color[idx]}>
+            <Popup>{this.state.popups[idx]}</Popup>
+            </CircleMarker>
           )}
         </FeatureGroup>
       </Map>
