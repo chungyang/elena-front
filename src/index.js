@@ -44,7 +44,7 @@ class ElenaMap extends React.Component {
       <SearchBar onGetRoute={this.highlighted_route}/>
       <Map center={position} zoom={this.state.zoom}  ref={this.mapRef}>
         <TileLayer
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
         <FeatureGroup>

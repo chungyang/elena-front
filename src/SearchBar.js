@@ -24,9 +24,9 @@ class SearchBar extends React.Component{
     this.state = {
       from : "",
       to : "",
-      percentage: "150",
-      algorithm: "DIJKSTRA_YEN",
-      elevationMode: "MIN",
+      percentage: "100",
+      algorithm: "A_STAR_YEN",
+      elevation: "MIN",
       fromLocationNames: [],
       toLocationNames: []
     }
@@ -38,7 +38,7 @@ class SearchBar extends React.Component{
     uri.searchParams.append("from", this.state.from);
     uri.searchParams.append("to", this.state.to);
     uri.searchParams.append("algorithm", this.state.algorithm);
-    uri.searchParams.append("elemode", this.state.elevationMode);
+    uri.searchParams.append("elemode", this.state.elevation);
     uri.searchParams.append("percentage", this.state.percentage);
 
 

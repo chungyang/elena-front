@@ -5,7 +5,7 @@ import { DropdownButton, Dropdown} from 'react-bootstrap'
 class AlgorithmMenu extends React.Component{
   constructor(props){
     super(props);
-    this.algorithms = ["A_STAR_YEN", "DIJKSTRA_YEN"];
+    this.algorithms = {"A*": "A_STAR","Dijkstra":"Dijkstra", "A* Yen":"A_STAR_YEN", "DIJKSTRA YEN" : "DIJKSTRA_YEN"};
     this.elevationModes = ["MAX", "MIN"];
     this.state = {
       algorithm: "Choose an algorithm",
@@ -28,8 +28,10 @@ class AlgorithmMenu extends React.Component{
       <div>
         <b>Algorithm</b>
         <DropdownButton id="dropdown-basic-button" title={this.state.algorithm} variant="outline-secondary">
-          <Dropdown.Item eventKey = {this.algorithms[0]} onSelect={this.changeAlgorithm} >A*</Dropdown.Item>
-          <Dropdown.Item eventKey = {this.algorithms[1]} onSelect={this.changeAlgorithm}>Dijkstra</Dropdown.Item>
+          <Dropdown.Item eventKey = {this.algorithms["A*"]} onSelect={this.changeAlgorithm} >A*</Dropdown.Item>
+          <Dropdown.Item eventKey = {this.algorithms["Dijkstra"]} onSelect={this.changeAlgorithm}>Dijkstra</Dropdown.Item>
+          <Dropdown.Item eventKey = {this.algorithms["A* Yen"]} onSelect={this.changeAlgorithm}>A* Yen</Dropdown.Item>
+          <Dropdown.Item eventKey = {this.algorithms["DIJKSTRA YEN"]} onSelect={this.changeAlgorithm}>Dijkstra Yen</Dropdown.Item>
         </DropdownButton>
         <div className="pad_top"/>
         <b>Elvation Mode</b>
