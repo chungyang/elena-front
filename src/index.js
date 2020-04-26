@@ -51,6 +51,16 @@ class ElenaMap extends React.Component {
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
         <FeatureGroup>
+        <Polyline color="grey" weight='6' positions={this.state.highlighted_route[1]}
+          onMouseOver={e => e.target.openPopup()}
+          onMouseOut={e => e.target.closePopup()}>
+          <Popup>
+            <div>
+              <p><b>Elevation: </b>{this.state.elevation[1]} meters</p>
+              <p><b>Distance: </b>{this.state.distance[1]} meters</p>
+            </div>
+          </Popup>
+        </Polyline>
           <Polyline color="blue" weight='5' positions={this.state.highlighted_route[0]} ref={this.routeRef}
             onMouseOver={e => e.target.openPopup()}
             onMouseOut={e => e.target.closePopup()}>
@@ -58,16 +68,6 @@ class ElenaMap extends React.Component {
               <div>
                 <p><b>Elevation: </b>{this.state.elevation[0]} meters</p>
                 <p><b>Distance: </b>{this.state.distance[0]} meters</p>
-              </div>
-            </Popup>
-          </Polyline>
-          <Polyline color="grey" weight='5' positions={this.state.highlighted_route[1]}
-            onMouseOver={e => e.target.openPopup()}
-            onMouseOut={e => e.target.closePopup()}>
-            <Popup>
-              <div>
-                <p><b>Elevation: </b>{this.state.elevation[1]} meters</p>
-                <p><b>Distance: </b>{this.state.distance[1]} meters</p>
               </div>
             </Popup>
           </Polyline>
