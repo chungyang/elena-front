@@ -41,7 +41,6 @@ class SearchBar extends React.Component{
     uri.searchParams.append("elemode", this.state.elevation);
     uri.searchParams.append("percentage", this.state.percentage);
 
-
     fetch(uri.href)
       .then(response =>  {return response.json()})
       .then(data => this.props.onGetRoute(data))

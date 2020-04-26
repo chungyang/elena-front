@@ -13,12 +13,13 @@ class ElenaMap extends React.Component {
     this.state = {
       center: [42.361145, -71.057083],
       zoom: 20,
-      highlighted_route: [],
+      highlighted_route: [[],[]],
+      elevation: [[], []],
+      distance: [[],[]],
       markers: [],
       popups: ["Origin", "Destination"],
       marker_color: ["green", "red"]
     }
-
 
     this.routeRef = React.createRef();
     this.mapRef = React.createRef();
@@ -28,17 +29,19 @@ class ElenaMap extends React.Component {
     const mapElement = this.mapRef.current.leafletElement;
     const routeElement = this.routeRef.current.leafletElement;
     this.setState({
-      highlighted_route:route.values,
-      markers: [route.values[0], route.values[route.values.length - 1]]
+      highlighted_route: [route.shortestpath.values, route.selectedpath.values],
+      elevation: [route.shortestpath.elevation, route.selectedpath.elevation],
+      distance: [route.shortestpath.distance, route.selectedpath.distance],
+      markers: [route.shortestpath.values[0], route.shortestpath.values[route.shortestpath.values.length - 1]]
     },
     ()=>{
       mapElement.fitBounds(routeElement.getBounds())
     });
   }
 
+
   render() {
     const position = [this.state.center[0], this.state.center[1]];
-
     return (
       <div>
       <SearchBar onGetRoute={this.highlighted_route}/>
@@ -48,7 +51,26 @@ class ElenaMap extends React.Component {
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
         <FeatureGroup>
-          <Polyline color="blue" weight='5' positions={this.state.highlighted_route} ref={this.routeRef}/>
+          <Polyline color="blue" weight='5' positions={this.state.highlighted_route[0]} ref={this.routeRef}
+            onMouseOver={e => e.target.openPopup()}
+            onMouseOut={e => e.target.closePopup()}>
+            <Popup>
+              <div>
+                <p><b>Elevation: </b>{this.state.elevation[0]} meters</p>
+                <p><b>Distance: </b>{this.state.distance[0]} meters</p>
+              </div>
+            </Popup>
+          </Polyline>
+          <Polyline color="grey" weight='5' positions={this.state.highlighted_route[1]}
+            onMouseOver={e => e.target.openPopup()}
+            onMouseOut={e => e.target.closePopup()}>
+            <Popup>
+              <div>
+                <p><b>Elevation: </b>{this.state.elevation[1]} meters</p>
+                <p><b>Distance: </b>{this.state.distance[1]} meters</p>
+              </div>
+            </Popup>
+          </Polyline>
           {this.state.markers.map((position, idx) =>
             <CircleMarker key={`marker-${idx}`} center={position} color="white" fillOpacity='0.8' fillColor={this.state.marker_color[idx]}>
             <Popup>{this.state.popups[idx]}</Popup>
