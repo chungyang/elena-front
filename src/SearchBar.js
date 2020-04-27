@@ -4,6 +4,7 @@ import AlgorithmMenu from './AlgorithmMenu'
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 class SearchBar extends React.Component{
@@ -28,7 +29,8 @@ class SearchBar extends React.Component{
       algorithm: "A_STAR_MULTIROUTES",
       elevation: "MIN",
       fromLocationNames: [],
-      toLocationNames: []
+      toLocationNames: [],
+      loading:false
     }
   }
 
@@ -40,10 +42,14 @@ class SearchBar extends React.Component{
     uri.searchParams.append("algorithm", this.state.algorithm);
     uri.searchParams.append("elemode", this.state.elevation);
     uri.searchParams.append("percentage", this.state.percentage);
+    this.setState({loading:true});
 
     fetch(uri.href)
       .then(response =>  {return response.json()})
-      .then(data => this.props.onGetRoute(data))
+      .then(data => {
+        this.props.onGetRoute(data);
+        this.setState({loading:false});
+      })
       .catch(error => alert("something went wrong"))
   }
 
@@ -138,6 +144,9 @@ class SearchBar extends React.Component{
             <AlgorithmMenu onSelect={this.algoMenuSelectHandler}/>
             <div className="pad_top" id="submit_button">
               <Button variant="outline-secondary" type="submit">Search</Button>
+            </div>
+            <div className="loading_spinner">
+              {this.state.loading && <CircularProgress size={100} color="#85929E"/>}
             </div>
         </div>
 

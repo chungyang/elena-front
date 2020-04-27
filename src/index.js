@@ -75,7 +75,7 @@ class ElenaMap extends React.Component {
           </Polyline>
           {this.state.markers.map((position, idx) =>
             <CircleMarker key={`marker-${idx}`} center={position} color="white" fillOpacity='0.8' fillColor={this.state.marker_color[idx]}>
-            <Popup>{this.state.popups[idx]}</Popup>
+              <Popup>{this.state.popups[idx]}</Popup>
             </CircleMarker>
           )}
         </FeatureGroup>
