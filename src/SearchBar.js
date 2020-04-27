@@ -25,7 +25,7 @@ class SearchBar extends React.Component{
       from : "",
       to : "",
       percentage: "100",
-      algorithm: "A_STAR_YEN",
+      algorithm: "A_STAR_MULTIROUTES",
       elevation: "MIN",
       fromLocationNames: [],
       toLocationNames: []

@@ -11,11 +11,11 @@ class ElenaMap extends React.Component {
   constructor() {
     super()
     this.state = {
-      center: [42.361145, -71.057083],
+      center: [37.7267455, -122.443671],
       zoom: 20,
       highlighted_route: [[],[]],
-      elevation: [[], []],
-      distance: [[],[]],
+      elevation: [[0], [1]],
+      distance: [[0],[1]],
       markers: [],
       popups: ["Origin", "Destination"],
       marker_color: ["green", "red"]
@@ -58,6 +58,8 @@ class ElenaMap extends React.Component {
             <div>
               <p><b>Elevation: </b>{this.state.elevation[1]} meters</p>
               <p><b>Distance: </b>{this.state.distance[1]} meters</p>
+              <p><b>Distance Percentage: </b>{(this.state.distance[1] / this.state.distance[0] * 100).toPrecision(4)} %</p>
+              <p><b>Elevation Percentage: </b>{(this.state.elevation[1] / this.state.elevation[0] * 100).toPrecision(4)} %</p>
             </div>
           </Popup>
         </Polyline>
