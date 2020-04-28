@@ -1,3 +1,7 @@
+## Install node modules 
+
+### `npm install`
+
 ## To run
 
 In the project directory, you can run:
