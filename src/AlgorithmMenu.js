@@ -36,7 +36,7 @@ class AlgorithmMenu extends React.Component{
           <Dropdown.Item eventKey = {this.algorithms["A* Multi-route"]} onSelect={this.changeAlgorithm}>A* Multi-route</Dropdown.Item>
         </DropdownButton>
         <div className="pad_top"/>
-        <b>Elvation Mode</b>
+        <b>Elevation Mode</b>
         <DropdownButton id="dropdown-basic-button" title={this.state.elevation} variant="outline-secondary">
           <Dropdown.Item eventKey = {this.elevationModes[0]} onSelect={this.changeElevationMode}>Max</Dropdown.Item>
           <Dropdown.Item eventKey = {this.elevationModes[1]} onSelect={this.changeElevationMode}>Min</Dropdown.Item>

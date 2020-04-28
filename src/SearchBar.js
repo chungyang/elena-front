@@ -146,7 +146,7 @@ class SearchBar extends React.Component{
               <Button variant="outline-secondary" type="submit">Search</Button>
             </div>
             <div className="loading_spinner">
-              {this.state.loading && <CircularProgress size={100} color="#85929E"/>}
+              {this.state.loading && <CircularProgress size={60} color="#85929E"/>}
             </div>
         </div>
 
