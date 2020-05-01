@@ -16,7 +16,7 @@ class AlgorithmMenu extends React.Component{
 
   changeAlgorithm = (eventKey, event) =>{
     this.setState({algorithm:eventKey})
-    return this.props.onSelect({key:"algorithm", value:eventKey});
+    return this.props.onSelect({key:"algorithm", value:this.algorithms[eventKey]});
   }
 
   changeElevationMode =  (eventKey, event) =>{
@@ -29,11 +29,11 @@ class AlgorithmMenu extends React.Component{
       <div>
         <b>Algorithm</b>
         <DropdownButton id="dropdown-basic-button" title={this.state.algorithm} variant="outline-secondary">
-          <Dropdown.Item eventKey = {this.algorithms["A*"]} onSelect={this.changeAlgorithm} >A*</Dropdown.Item>
-          <Dropdown.Item eventKey = {this.algorithms["Dijkstra"]} onSelect={this.changeAlgorithm}>Dijkstra</Dropdown.Item>
-          <Dropdown.Item eventKey = {this.algorithms["A* Yen"]} onSelect={this.changeAlgorithm}>A* Yen</Dropdown.Item>
-          <Dropdown.Item eventKey = {this.algorithms["Dijkstra Yen"]} onSelect={this.changeAlgorithm}>Dijkstra Yen</Dropdown.Item>
-          <Dropdown.Item eventKey = {this.algorithms["A* Multi-route"]} onSelect={this.changeAlgorithm}>A* Multi-route</Dropdown.Item>
+          <Dropdown.Item eventKey = "A*" onSelect={this.changeAlgorithm}>A*</Dropdown.Item>
+          <Dropdown.Item eventKey = "Dijkstra" onSelect={this.changeAlgorithm}>Dijkstra</Dropdown.Item>
+          <Dropdown.Item eventKey = "A* Yen" onSelect={this.changeAlgorithm}>A* Yen</Dropdown.Item>
+          <Dropdown.Item eventKey = "Dijkstra Yen" onSelect={this.changeAlgorithm}>Dijkstra Yen</Dropdown.Item>
+          <Dropdown.Item eventKey = "A* Multi-route" onSelect={this.changeAlgorithm}>A* Multi-route</Dropdown.Item>
         </DropdownButton>
         <div className="pad_top"/>
         <b>Elevation Mode</b>
