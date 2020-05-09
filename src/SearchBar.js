@@ -60,11 +60,12 @@ class SearchBar extends React.Component{
     fetch(uri.href)
       .then(response => { return response.json()} )
       .then(data =>{
+        console.log(data)
         if(type === "from"){
-          this.setState({fromLocationNames: data.values})
+          this.setState({fromLocationNames: data})
         }
         else{
-          this.setState({toLocationNames: data.values})
+          this.setState({toLocationNames: data})
         }
       })
   }
@@ -104,7 +105,7 @@ class SearchBar extends React.Component{
         <div id="search_form">
           <Autocomplete
              freeSolo
-             options={this.state.fromLocationNames.map((option) => option.name)}
+             options={this.state.fromLocationNames}
              id="from"
              onChange={this.changeHandler}
              renderInput={(params) => (
@@ -120,7 +121,7 @@ class SearchBar extends React.Component{
            />
             <Autocomplete
               freeSolo
-              options={this.state.toLocationNames.map((option)=>option.name)}
+              options={this.state.toLocationNames}
               id="to"
               onChange={this.changeHandler}
               renderInput={(params) => (
